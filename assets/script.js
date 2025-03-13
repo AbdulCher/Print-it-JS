@@ -17,60 +17,55 @@ const slides = [
 	}
 ]
 
-//  Ajout eventListener sur les flèches
+//  1 - Ajout eventListener sur les flèches
 
-let arrowLeft = document.querySelector(".arrow_left")
-	arrowLeft.addEventListener('click', () => {
-		console.log("Vous avez cliqué sur la flèche gauche")
+//  2 - Défilement infini sur le caroussol( grâce à %, revient à 0 quand on dépasse le dernier slide)
+
+// Flèche gauche
+document.querySelector(".arrow_left").addEventListener("click", () => {
+    currentIndex = (currentIndex - 1 + slides.length) % slides.length; 
+    showSlide(currentIndex);
+    console.log("Vous avez cliqué sur la flèche gauche")
 });
 
-let arrowRight = document.querySelector(".arrow_right")
-	arrowRight.addEventListener('click', () => {
-		console.log("Vous avez cliqué sur la flèche droite")
+// Flèche droite
+document.querySelector(".arrow_right").addEventListener("click", () => {
+    currentIndex = (currentIndex + 1) % slides.length;
+    showSlide(currentIndex);
+    console.log("Vous avez cliqué sur la flèche droite")
 });
+
 
 //   Ajout des div, les bullets points
 
-let newDiv = document.createElement("div")
-let parentDiv = document.querySelector(".dots")
-	parentDiv.appendChild(newDiv)
-	newDiv.classList.add("dot")
-	newDiv.classList.add("dot_selected")
-	
-let newDivOne = document.createElement("div")
-	parentDiv.appendChild(newDivOne)
-	newDivOne.classList.add("dot")
+const parentDiv = document.querySelector(".dots");
 
-let newDivTwo = document.createElement("div")
-	parentDiv.appendChild(newDivTwo)
-	newDivTwo.classList.add("dot")
+for (let i = 0; i < slides.length; i++) {  // Création de 4 "dot" div
+    const newDiv = document.createElement("div");
+    newDiv.classList.add("dot");
 
-let newDivThree = document.createElement("div")
-	parentDiv.appendChild(newDivThree)
-	newDivThree.classList.add("dot")
+    if (i === 0) {  // Ajoute "dot_selected" à la première div
+        newDiv.classList.add("dot_selected");
+    }
+
+    parentDiv.appendChild(newDiv);  // Ajoute la div dans le parent
+}
 
 //   Ajout des images du slider
 
 const banner = document.getElementById("banner")
 const paragraphe = banner.querySelector("p"); // Elément de refference
 
-const imageTwo = document.createElement("img");
-	imageTwo.src = "assets/images/slideshow/slide2.jpg";
-	imageTwo.classList = "banner-img"
-	imageTwo.alt = "Banner Print-it";
-	banner.insertBefore(imageTwo, paragraphe)
+slides.forEach((slide, index) => {
+    if (index === 0) return; // On saute le premier slide (déjà présent dans le HTML)
 
-const imageThree = document.createElement("img");
-	imageThree.src = "assets/images/slideshow/slide3.jpg";
-	imageThree.classList = "banner-img"
-	imageThree.alt = "Banner Print-it";
-	banner.insertBefore(imageThree, paragraphe)
+    const img = document.createElement("img");
+    img.src = slide.image;
+    img.classList.add("banner-img");
+    img.alt = "Banner Print-it";
+    banner.insertBefore(img, paragraphe);
+}); 
 
-const image = document.createElement("img");
-	image.src = "assets/images/slideshow/slide4.png";
-	image.classList = "banner-img"
-	image.alt = "Banner Print-it";
-	banner.insertBefore(image, paragraphe)
 
 let currentIndex = 0;
 
@@ -96,18 +91,7 @@ function showSlide(index) {
     });
 }
 
-// Défilement infini sur le caroussol
-// Flèche gauche
-document.querySelector(".arrow_left").addEventListener("click", () => {
-    currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-    showSlide(currentIndex);
-});
 
-// Flèche droite
-document.querySelector(".arrow_right").addEventListener("click", () => {
-    currentIndex = (currentIndex + 1) % slides.length;
-    showSlide(currentIndex);
-});
 
 // Afficher le premier slide au chargement
 showSlide(currentIndex);
